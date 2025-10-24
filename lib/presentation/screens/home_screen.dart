@@ -65,7 +65,6 @@ class _HomeScreenState extends State<HomeScreen> {
               Form(
                 child: Column(
                   children: [
-                    // Nombre
                     UserTextField(
                       label: "Nombre",
                       icon: Icons.person_outline,
@@ -75,7 +74,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Apellido
                     UserTextField(
                       label: "Apellido",
                       icon: Icons.person,
@@ -85,7 +83,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     const SizedBox(height: 16),
 
-                    // Fecha de nacimiento
                     UserTextField(
                       label: "Fecha de nacimiento",
                       icon: Icons.calendar_today,
