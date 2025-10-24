@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:user_hub_flutter/blocs/address/address_bloc.dart';
 import 'package:user_hub_flutter/blocs/user_form/user_form_bloc.dart';
+import 'package:user_hub_flutter/models/address_model.dart';
 
 class SummaryScreen extends StatelessWidget {
   const SummaryScreen({super.key});
@@ -11,6 +12,7 @@ class SummaryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final userState = context.select((UserFormBloc bloc) => bloc.state);
     final addressState = context.select((AddressBloc bloc) => bloc.state);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Resumen de Usuario"),
@@ -29,7 +31,7 @@ class SummaryScreen extends StatelessWidget {
               const SizedBox(height: 12),
               ListTile(
                 leading: const Icon(Icons.person),
-                title: Text("${userState.firstName} ${userState.lastName}"),
+                title: Text("${userState.firstName ?? ''} ${userState.lastName ?? ''}"),
                 subtitle: const Text("Nombre completo"),
               ),
               ListTile(
@@ -49,10 +51,14 @@ class SummaryScreen extends StatelessWidget {
               const SizedBox(height: 12),
               if (addressState.addresses!.isEmpty)
                 const Text("No hay direcciones registradas"),
-              ...addressState.addresses!.map((address) => Card(
+              ...addressState.addresses!.map((AddressModel address) => Card(
+                    margin: const EdgeInsets.symmetric(vertical: 6),
                     child: ListTile(
-                      leading: const Icon(Icons.home),
-                      title: Text(address),
+                      leading: const Icon(Icons.home, color: Colors.teal),
+                      title: Text(address.street),
+                      subtitle: Text(
+                        "${address.municipality}, ${address.department}, ${address.country}",
+                      ),
                     ),
                   )),
             ],
