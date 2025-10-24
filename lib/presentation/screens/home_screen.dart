@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:user_hub_flutter/blocs/user_form/user_form_bloc.dart';
+import 'package:user_hub_flutter/presentation/widgets/error_dialog.dart';
+import 'package:user_hub_flutter/presentation/widgets/user_text_field.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -64,12 +66,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: [
                     // Nombre
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: "Nombre",
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.person_outline),
-                      ),
+                    UserTextField(
+                      label: "Nombre",
+                      icon: Icons.person_outline,
                       onChanged: (value) {
                         context.read<UserFormBloc>().add(SetFirstNameEvent(firstName: value));
                       },
@@ -77,12 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 16),
 
                     // Apellido
-                    TextFormField(
-                      decoration: const InputDecoration(
-                        labelText: "Apellido",
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.person),
-                      ),
+                    UserTextField(
+                      label: "Apellido",
+                      icon: Icons.person,
                       onChanged: (value) {
                         context.read<UserFormBloc>().add(SetLastNameEvent(lastName: value));
                       },
@@ -90,19 +86,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(height: 16),
 
                     // Fecha de nacimiento
-                      TextFormField(
-                      controller: _fechaController,
+                    UserTextField(
+                      label: "Fecha de nacimiento",
+                      icon: Icons.calendar_today,
                       readOnly: true,
-                      decoration: InputDecoration(
-                        labelText: "Fecha de nacimiento",
-                        border: const OutlineInputBorder(),
-                        prefixIcon: const Icon(Icons.calendar_today),
-                        suffixIcon: IconButton(
-                          icon: const Icon(Icons.date_range),
-                          onPressed: () => _selectDate(context),
-                        ),
-                      ),
+                      controller: _fechaController,
                       onTap: () => _selectDate(context),
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.date_range),
+                        onPressed: () => _selectDate(context),
+                      ),
                     ),
                     const SizedBox(height: 32),
 
@@ -112,34 +105,34 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: ElevatedButton(
                         onPressed: () {
                           if (state.firstName == null || state.firstName!.isEmpty) {
-                            _showErrorDialog(
-                              context, 
+                            ErrorDialog.show(
+                              context,
                               "Campo requerido",
-                              "Por favor ingresa tu nombre antes de continuar."
+                              "Por favor ingresa tu nombre antes de continuar.",
                             );
                             return;
                           }
                           if (state.lastName == null || state.lastName!.isEmpty) {
-                            _showErrorDialog(
-                              context, 
+                            ErrorDialog.show(
+                              context,
                               "Campo requerido",
-                              "Por favor ingresa tu apellido antes de continuar."
+                              "Por favor ingresa tu apellido antes de continuar.",
                             );
                             return;
                           }
                           if (state.birthDate == null) {
-                            _showErrorDialog(
-                              context, 
+                            ErrorDialog.show(
+                              context,
                               "Campo requerido",
-                              "Por favor ingresa tu fecha de nacimiento antes de continuar."
+                              "Por favor ingresa tu fecha de nacimiento antes de continuar.",
                             );
                             return;
                           }
                          if (state.birthDate!.isAfter(DateTime.now())) {
-                            _showErrorDialog(
-                              context, 
+                            ErrorDialog.show(
+                              context,
                               "Fecha inválida",
-                              "La fecha de nacimiento no puede ser en el futuro."
+                              "La fecha de nacimiento no puede ser en el futuro.",
                             );
                             return;
                           }
@@ -163,22 +156,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         )
-      ),
-    );
-  }
-
-  void _showErrorDialog(BuildContext context, String title, String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => context.pop(),
-            child: const Text("Aceptar"),
-          ),
-        ],
       ),
     );
   }
